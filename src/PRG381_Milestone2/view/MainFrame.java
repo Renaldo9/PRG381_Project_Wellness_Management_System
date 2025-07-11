@@ -35,54 +35,54 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         tabbedPane = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        pnlAppointment = new javax.swing.JPanel();
+        pnlCounselor = new javax.swing.JPanel();
+        pnlFeedback = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Wellness Management System");
         setSize(new java.awt.Dimension(900, 600));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlAppointmentLayout = new javax.swing.GroupLayout(pnlAppointment);
+        pnlAppointment.setLayout(pnlAppointmentLayout);
+        pnlAppointmentLayout.setHorizontalGroup(
+            pnlAppointmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 979, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlAppointmentLayout.setVerticalGroup(
+            pnlAppointmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 591, Short.MAX_VALUE)
         );
 
-        tabbedPane.addTab("Appointment", jPanel1);
+        tabbedPane.addTab("Appointment", pnlAppointment);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlCounselorLayout = new javax.swing.GroupLayout(pnlCounselor);
+        pnlCounselor.setLayout(pnlCounselorLayout);
+        pnlCounselorLayout.setHorizontalGroup(
+            pnlCounselorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 979, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlCounselorLayout.setVerticalGroup(
+            pnlCounselorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 591, Short.MAX_VALUE)
         );
 
-        tabbedPane.addTab("Counselor", jPanel2);
+        tabbedPane.addTab("Counselor", pnlCounselor);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlFeedbackLayout = new javax.swing.GroupLayout(pnlFeedback);
+        pnlFeedback.setLayout(pnlFeedbackLayout);
+        pnlFeedbackLayout.setHorizontalGroup(
+            pnlFeedbackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 979, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlFeedbackLayout.setVerticalGroup(
+            pnlFeedbackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 591, Short.MAX_VALUE)
         );
 
-        tabbedPane.addTab("Feedback", jPanel3);
+        tabbedPane.addTab("Feedback", pnlFeedback);
 
-        tabbedPane.setSelectedComponent(jPanel1);
+        tabbedPane.setSelectedComponent(pnlAppointment);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -128,9 +128,9 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel pnlAppointment;
+    private javax.swing.JPanel pnlCounselor;
+    private javax.swing.JPanel pnlFeedback;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
 }
