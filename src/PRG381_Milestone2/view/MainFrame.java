@@ -47,11 +47,11 @@ public class MainFrame extends javax.swing.JFrame {
         pnlAppointment.setLayout(pnlAppointmentLayout);
         pnlAppointmentLayout.setHorizontalGroup(
             pnlAppointmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 979, Short.MAX_VALUE)
+            .addGap(0, 839, Short.MAX_VALUE)
         );
         pnlAppointmentLayout.setVerticalGroup(
             pnlAppointmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 591, Short.MAX_VALUE)
+            .addGap(0, 525, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Appointment", pnlAppointment);
@@ -60,11 +60,11 @@ public class MainFrame extends javax.swing.JFrame {
         pnlCounselor.setLayout(pnlCounselorLayout);
         pnlCounselorLayout.setHorizontalGroup(
             pnlCounselorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 979, Short.MAX_VALUE)
+            .addGap(0, 839, Short.MAX_VALUE)
         );
         pnlCounselorLayout.setVerticalGroup(
             pnlCounselorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 591, Short.MAX_VALUE)
+            .addGap(0, 525, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Counselor", pnlCounselor);
@@ -73,11 +73,11 @@ public class MainFrame extends javax.swing.JFrame {
         pnlFeedback.setLayout(pnlFeedbackLayout);
         pnlFeedbackLayout.setHorizontalGroup(
             pnlFeedbackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 979, Short.MAX_VALUE)
+            .addGap(0, 839, Short.MAX_VALUE)
         );
         pnlFeedbackLayout.setVerticalGroup(
             pnlFeedbackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 591, Short.MAX_VALUE)
+            .addGap(0, 525, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Feedback", pnlFeedback);
@@ -88,15 +88,11 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 979, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(tabbedPane)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 626, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(tabbedPane)
         );
 
         pack();
