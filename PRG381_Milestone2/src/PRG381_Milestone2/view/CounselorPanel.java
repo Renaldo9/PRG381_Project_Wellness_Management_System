@@ -3,20 +3,74 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package PRG381_Milestone2.view;
+import PRG381_Milestone2.model.Counselor;
+import PRG381_Milestone2.controller.CounselorController;
+import PRG381_Milestone2.view.MainFrame;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author User
  */
 public class CounselorPanel extends javax.swing.JPanel {
-
+    
+    private CounselorController controller;
+    private List<Counselor> counselorList = new ArrayList<>();
+    private DefaultTableModel tableModel;
+    
     /**
      * Creates new form CounselorPanel
      */
     public CounselorPanel() {
         initComponents();
+        
+        controller = new CounselorController(MainFrame.db.getConnection());
+        tableModel = (DefaultTableModel) tblCounselors.getModel();
+        
+        loadCounselors();
     }
+    
+    private void loadCounselors(){
+        counselorList = controller.getAllCounselors();
+        tableModel.setRowCount(0);
+        
+        for (Counselor c : counselorList){
+            tableModel.addRow(new Object[]{
+                c.getId(),
+                c.getName(),
+                c.getSpecialization(),
+                c.getAvailability()
+            });
+        }
+    }
+    
+    private void clearFields(){
+        txtName.setText("");
+        txtSpecialization.setText("");
+        cboAvailability.setSelectedIndex(0);
+        lblUpdateID.setText("");
+    }
+    
+    private void fillFieldsFromTable(){
+        int row = tblCounselors.getSelectedRow();
+        
+        if (row >= 0){
+            lblUpdateID.setText(tableModel.getValueAt(row,0).toString());
+            txtName.setText(tableModel.getValueAt(row, 1).toString());
+            txtSpecialization.setText(tableModel.getValueAt(row, 2).toString());
+            // Get the availability string from the table
+            String availability = tableModel.getValueAt(row, 3).toString();
 
+            // Set the selected item of the combo box to this value
+            cboAvailability.setSelectedItem(availability);
+        }
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,15 +92,22 @@ public class CounselorPanel extends javax.swing.JPanel {
         btnViewAll = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
+        lblupdateInfo = new javax.swing.JLabel();
+        lblUpdateID = new javax.swing.JLabel();
 
         tblCounselors.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Name", "Specialization", "Availability"
+                "id", "name", "specialization", "availability"
             }
         ));
+        tblCounselors.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCounselorsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblCounselors);
 
         lblName.setText("Full Name:");
@@ -58,12 +119,34 @@ public class CounselorPanel extends javax.swing.JPanel {
         cboAvailability.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Unavailable" }));
 
         btnAdd.setText("Add Counselor");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         btnViewAll.setText("View All");
+        btnViewAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewAllActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnRemove.setText("Remove");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
+
+        lblupdateInfo.setText("Id for update:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -72,19 +155,27 @@ public class CounselorPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(48, 48, 48)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(lblSpecialization)
-                                .addComponent(lblAvailability)
-                                .addComponent(txtSpecialization)
-                                .addComponent(txtName)
-                                .addComponent(cboAvailability, 0, 180, Short.MAX_VALUE))
-                            .addComponent(lblName)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(78, 78, 78)
-                        .addComponent(btnAdd)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(48, 48, 48)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblName)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(lblUpdateID)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(lblSpecialization)
+                                            .addComponent(lblAvailability)
+                                            .addComponent(txtSpecialization)
+                                            .addComponent(txtName)
+                                            .addComponent(cboAvailability, 0, 180, Short.MAX_VALUE)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(78, 78, 78)
+                                .addComponent(btnAdd)))
+                        .addGap(18, 43, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblupdateInfo)
+                        .addGap(49, 49, 49)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnUpdate)
@@ -102,7 +193,10 @@ public class CounselorPanel extends javax.swing.JPanel {
                     .addComponent(lblName)
                     .addComponent(btnViewAll))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -114,15 +208,83 @@ public class CounselorPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cboAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(34, 34, 34)
-                        .addComponent(btnAdd))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                        .addComponent(btnAdd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblupdateInfo)
+                        .addGap(8, 8, 8)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnUpdate)
-                    .addComponent(btnRemove))
+                    .addComponent(btnRemove)
+                    .addComponent(lblUpdateID))
                 .addContainerGap(149, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        String name = txtName.getText();
+        String specialization = txtSpecialization.getText();
+        String availability = cboAvailability.getSelectedItem().toString();
+        
+        if( name.isEmpty() || specialization.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Please fill in all fields");
+            
+        }else{
+            Counselor c = new Counselor(name, specialization, availability);
+            
+            if (controller.addCounselor(c)){
+                JOptionPane.showMessageDialog(this, "Counselor added succesfully");
+                clearFields();
+                loadCounselors();
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to add counselor");
+            }
+        }
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnViewAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllActionPerformed
+        loadCounselors();
+    }//GEN-LAST:event_btnViewAllActionPerformed
+
+    private void tblCounselorsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCounselorsMouseClicked
+        fillFieldsFromTable();
+    }//GEN-LAST:event_tblCounselorsMouseClicked
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        int row = tblCounselors.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Select a row to update.");
+            return;
+        }
+
+        int id = (int) tableModel.getValueAt(row, 0);
+        String name = txtName.getText();
+        String spec = txtSpecialization.getText();
+        String avail = cboAvailability.getSelectedItem().toString();
+
+        Counselor c = new Counselor(id, name, spec, avail);
+        if (controller.updateCounselor(c)) {
+            JOptionPane.showMessageDialog(this, "Counselor updated.");
+            clearFields();
+            loadCounselors();
+        } else {
+            JOptionPane.showMessageDialog(this, "Counselor not updated");
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        int row = tblCounselors.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Select a row to delete.");
+            return;
+        }
+
+        int id = (int) tableModel.getValueAt(row, 0);
+        if (controller.deleteCounselor(id)) {
+            JOptionPane.showMessageDialog(this, "Counselor removed.");
+            clearFields();
+            loadCounselors();
+        }
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -135,6 +297,8 @@ public class CounselorPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblAvailability;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblSpecialization;
+    private javax.swing.JLabel lblUpdateID;
+    private javax.swing.JLabel lblupdateInfo;
     private javax.swing.JTable tblCounselors;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtSpecialization;
