@@ -62,7 +62,7 @@ public class DBConnection {
             System.out.println("Tables created successfully.");
 
         } catch (SQLException e) {
-            System.out.println("⚠️ Could not create tables (they may already exist): " + e.getMessage());
+            System.out.println("Could not create tables (they may already exist): " + e.getMessage());
         }
     }
 }
