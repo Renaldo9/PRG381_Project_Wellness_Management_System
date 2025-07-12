@@ -20,6 +20,9 @@ public class DBConnection {
     public DBConnection(){
         
     }
+    public Connection getConnection(){
+        return this.con;
+    }
     
     public void connect() throws ClassNotFoundException{
         try {
