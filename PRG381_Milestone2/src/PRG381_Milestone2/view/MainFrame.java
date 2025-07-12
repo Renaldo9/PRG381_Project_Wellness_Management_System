@@ -22,7 +22,7 @@ public class MainFrame extends javax.swing.JFrame {
         
         try {
             db.connect();
-//          db.createTables();   // create tables if not already created
+            db.createTables();   // create tables if not already created
         } catch (ClassNotFoundException e){
             System.out.println("Failed to connect");
             e.printStackTrace();
