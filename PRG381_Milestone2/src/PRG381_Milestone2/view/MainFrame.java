@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package PRG381_Milestone2.view;
+
+import PRG381_Milestone2.controller.DBConnection;
+
 /**
  *
  * @author User
@@ -10,17 +13,27 @@ package PRG381_Milestone2.view;
 public class MainFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
-
+    public static DBConnection db = new DBConnection();
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
+        
+        try {
+            db.connect();
+            db.createTables();   // create tables if not already created
+        } catch (ClassNotFoundException e){
+            System.out.println("Failed to connect");
+            e.printStackTrace();
+        }
+        
         tabbedPane.removeAll(); // clear dummy tabs
 
         tabbedPane.addTab("Appointments", new AppointmentPanel());
         tabbedPane.addTab("Counselors", new CounselorPanel());
         tabbedPane.addTab("Feedback", new FeedbackPanel());
+        
         this.setVisible(true);
         this.setLocationRelativeTo(null);
     }

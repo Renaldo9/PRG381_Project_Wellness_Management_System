@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Sat Jul 12 12:31:25 SAST 2025:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-0197-fe30-9021-00000728a348 
+on database directory C:\Users\renal\OneDrive\Documents\GitHub\PRG381_Project_Wellness_Management_System\PRG381_Milestone2\wellnessDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@70dea4e 
+Loaded from file:/C:/Users/renal/OneDrive/Documents/GitHub/PRG381_Project_Wellness_Management_System/PRG381_Milestone2/src/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=21.0.7+8-LTS-245
+user.dir=C:\Users\renal\OneDrive\Documents\GitHub\PRG381_Project_Wellness_Management_System\PRG381_Milestone2
+os.name=Windows 11
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
