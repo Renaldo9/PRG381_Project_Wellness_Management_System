@@ -276,12 +276,14 @@ public class CounselorPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Select a row to delete.");
             return;
         }
-
-        int id = (int) tableModel.getValueAt(row, 0);
-        if (controller.deleteCounselor(id)) {
-            JOptionPane.showMessageDialog(this, "Counselor removed.");
-            clearFields();
-            loadCounselors();
+        int confirm = JOptionPane.showConfirmDialog(this,"Are you sure you want to delete this counselor?","Confirm Delete",JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION){
+            int id = (int) tableModel.getValueAt(row, 0);
+            if (controller.deleteCounselor(id)) {
+                JOptionPane.showMessageDialog(this, "Counselor removed.");
+                clearFields();
+                loadCounselors();
+            }
         }
     }//GEN-LAST:event_btnRemoveActionPerformed
 

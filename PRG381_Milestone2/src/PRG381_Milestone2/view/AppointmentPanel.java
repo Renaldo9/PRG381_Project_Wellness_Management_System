@@ -394,12 +394,14 @@ public class AppointmentPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Select a row to delete.");
             return;
         }
-
-        int id = (int) tableModel.getValueAt(row, 0);
-        if (controller.deleteAppointment(id)) {
-            JOptionPane.showMessageDialog(this, "Appointment removed.");
-            clearFields();
-            loadAppointments();
+        int confirm = JOptionPane.showConfirmDialog(this,"Are you sure you want to delete this appointment?","Confirm Delete",JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION){
+            int id = (int) tableModel.getValueAt(row, 0);
+            if (controller.deleteAppointment(id)) {
+                JOptionPane.showMessageDialog(this, "Appointment removed.");
+                clearFields();
+                loadAppointments();
+            }
         }
     }//GEN-LAST:event_btnCancelActionPerformed
 
