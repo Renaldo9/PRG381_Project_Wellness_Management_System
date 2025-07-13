@@ -5,7 +5,6 @@
 package PRG381_Milestone2.view;
 import PRG381_Milestone2.model.Counselor;
 import PRG381_Milestone2.controller.CounselorController;
-import PRG381_Milestone2.view.MainFrame;
 
 import java.util.ArrayList;
 import java.util.List;

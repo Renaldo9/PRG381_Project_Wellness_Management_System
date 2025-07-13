@@ -4,19 +4,109 @@
  */
 package PRG381_Milestone2.view;
 
+import PRG381_Milestone2.controller.AppointmentController;
+import PRG381_Milestone2.model.Appointment;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
+
 /**
  *
  * @author User
  */
 public class AppointmentPanel extends javax.swing.JPanel {
 
+    private AppointmentController controller;
+    
+    private List<Appointment> appointmentList = new ArrayList<>();
+    private DefaultTableModel tableModel;
+    
     /**
      * Creates new form AppointmentPanel
      */
     public AppointmentPanel() {
         initComponents();
+        
+        controller = new AppointmentController(MainFrame.db.getConnection());
+        tableModel = (DefaultTableModel) tblAppointments.getModel();
+        
+        loadAppointments();
+        loadAvailableCounselors();
     }
-
+    
+    private void loadAppointments(){
+        appointmentList = controller.getAllAppointments();
+        tableModel.setRowCount(0);
+        
+        for (Appointment c : appointmentList){
+            tableModel.addRow(new Object[]{
+                c.getId(),
+                c.getStudent(),
+                c.getCounselor(),
+                c.getDate(),
+                c.getTime(),
+                c.getStatus()
+            });
+        }
+    }
+    
+    private void loadUpcomingAppointments(){
+        appointmentList = controller.getAllUpcomingAppointments();
+        tableModel.setRowCount(0);
+        
+        for (Appointment c : appointmentList){
+            tableModel.addRow(new Object[]{
+                c.getId(),
+                c.getStudent(),
+                c.getCounselor(),
+                c.getDate(),
+                c.getTime(),
+                c.getStatus()
+            });
+        }
+    }
+    
+    private void clearFields(){
+        txtStudent.setText("");
+        cboCounselor.setSelectedIndex(0);
+        txtDate.setText("");
+        txtTime.setText("");
+        cboStatus.setSelectedIndex(0);
+        lblID.setText("");
+    }
+    
+    private void loadAvailableCounselors(){
+        ResultSet rs =controller.loadAvailableCounselors();
+        
+        if (rs != null){
+            cboCounselor.removeAllItems();
+            try {
+                while(rs.next()){
+                    cboCounselor.addItem(rs.getString("name"));
+                }
+            } catch (SQLException e){
+                JOptionPane.showMessageDialog(this, "Failed to load counselors"+ e.getMessage());
+            }
+        }
+    }
+    
+    private void fillFieldsFromTable(){
+        int row = tblAppointments.getSelectedRow();
+        
+        if (row >= 0){
+            lblID.setText(tableModel.getValueAt(row, 0).toString());
+            txtStudent.setText(tableModel.getValueAt(row, 1).toString());
+            String counselor = tableModel.getValueAt(row, 2).toString();
+            cboCounselor.setSelectedItem(counselor);
+            txtDate.setText(tableModel.getValueAt(row, 3).toString());
+            txtTime.setText(tableModel.getValueAt(row, 4).toString());
+            String status = tableModel.getValueAt(row, 5).toString();
+            cboStatus.setSelectedItem(status);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,60 +128,130 @@ public class AppointmentPanel extends javax.swing.JPanel {
         cboCounselor = new javax.swing.JComboBox<>();
         lblCounselor = new javax.swing.JLabel();
         lblDate = new javax.swing.JLabel();
-        txtDate = new javax.swing.JTextField();
         lblTime = new javax.swing.JLabel();
-        txtTime = new javax.swing.JTextField();
+        cboStatus = new javax.swing.JComboBox<>();
+        lblStatus = new javax.swing.JLabel();
+        lblUpdateIndicator = new javax.swing.JLabel();
+        lblID = new javax.swing.JLabel();
+        txtDate = new javax.swing.JFormattedTextField();
+        txtTime = new javax.swing.JFormattedTextField();
 
         tblAppointments.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Student", "Counselor", "Date", "Time", "Status"
+                "id", "student", "counselor", "date", "time", "status"
             }
         ));
+        tblAppointments.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblAppointmentsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblAppointments);
 
         btnBook.setText("Book Appointment");
+        btnBook.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBookActionPerformed(evt);
+            }
+        });
 
         btnViewUpcoming.setText("View All upcoming appointments");
+        btnViewUpcoming.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewUpcomingActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setText("Update Appointment");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnCancel.setText("Cancel Appointment");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         btnViewAll.setText("View All Appointments");
+        btnViewAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewAllActionPerformed(evt);
+            }
+        });
 
         lblStudent.setText("Student Full Name:");
 
-        cboCounselor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboCounselor.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+                cboCounselorPopupMenuWillBecomeVisible(evt);
+            }
+        });
+        cboCounselor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cboCounselorMouseClicked(evt);
+            }
+        });
 
         lblCounselor.setText("Counselor:");
 
-        lblDate.setText("Date:");
+        lblDate.setText("Date: (format: day/month/year)");
 
-        lblTime.setText("Time:");
+        lblTime.setText("Time: (format: hour:time)");
+
+        cboStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Unresolved", "Resolved" }));
+
+        lblStatus.setText("Status:");
+
+        lblUpdateIndicator.setText("Id for update:");
+
+        try {
+            txtDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            txtTime.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblTime)
-                            .addComponent(lblCounselor)
-                            .addComponent(lblStudent)
-                            .addComponent(txtStudent)
-                            .addComponent(cboCounselor, 0, 226, Short.MAX_VALUE)
-                            .addComponent(lblDate)
-                            .addComponent(txtDate)
-                            .addComponent(txtTime)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(69, 69, 69)
-                        .addComponent(btnBook)))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(70, 70, 70)
+                            .addComponent(btnBook))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(31, 31, 31)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(lblID)
+                                .addComponent(lblTime, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblCounselor, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblStudent, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtStudent, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(cboCounselor, javax.swing.GroupLayout.Alignment.LEADING, 0, 226, Short.MAX_VALUE)
+                                .addComponent(lblDate, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblStatus, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(cboStatus, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtDate, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtTime))))
+                    .addComponent(lblUpdateIndicator))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
@@ -120,8 +280,8 @@ public class AppointmentPanel extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lblStudent)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txtStudent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -131,21 +291,117 @@ public class AppointmentPanel extends javax.swing.JPanel {
                         .addComponent(cboCounselor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblDate)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblTime)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
-                        .addComponent(btnBook)))
-                .addGap(40, 40, 40)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblStatus)
+                        .addGap(11, 11, 11)
+                        .addComponent(cboStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnBook))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblUpdateIndicator)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addComponent(lblID)
+                .addGap(1, 1, 1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnUpdate)
                     .addComponent(btnCancel))
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(114, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookActionPerformed
+        String student = txtStudent.getText();
+        String counselor = cboCounselor.getSelectedItem().toString();
+        String date = txtDate.getText();
+        String time = txtTime.getText();
+        String status = cboStatus.getSelectedItem().toString();
+        
+        if (student.isEmpty() || date.isEmpty() || time.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Please fill in all fields");
+        } else{
+            Appointment a = new Appointment(student,counselor,date,time,status);
+            
+            if (controller.bookAppointment(a)){
+                JOptionPane.showMessageDialog(this, "Appointment added succesfully");
+                clearFields();
+                loadAppointments();
+            }else{
+                JOptionPane.showMessageDialog(this, "Failed to add appointment");
+            }
+        }
+            
+    }//GEN-LAST:event_btnBookActionPerformed
+
+    private void cboCounselorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cboCounselorMouseClicked
+        loadAvailableCounselors();
+    }//GEN-LAST:event_cboCounselorMouseClicked
+
+    private void cboCounselorPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cboCounselorPopupMenuWillBecomeVisible
+        loadAvailableCounselors();
+    }//GEN-LAST:event_cboCounselorPopupMenuWillBecomeVisible
+
+    private void btnViewAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllActionPerformed
+        loadAppointments();
+        clearFields();
+    }//GEN-LAST:event_btnViewAllActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        int row = tblAppointments.getSelectedRow();
+        if (row < 0){
+            JOptionPane.showMessageDialog(this, "Select a row to update");
+            return;
+        }
+        
+        int id = (int) tableModel.getValueAt(row, 0);
+        String student = txtStudent.getText();
+        String counselor = cboCounselor.getSelectedItem().toString();
+        String date = txtDate.getText();
+        String time = txtTime.getText();
+        String status = cboStatus.getSelectedItem().toString();
+        
+        Appointment a = new Appointment(id,student,counselor,date,time,status);
+        
+        if (controller.updateAppointment(a)){
+            JOptionPane.showMessageDialog(this, "Appointment Updated");
+            clearFields();
+            loadAppointments();
+        } else {
+            JOptionPane.showMessageDialog(this, "Appointment failed to update");
+        }
+        
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void tblAppointmentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAppointmentsMouseClicked
+        fillFieldsFromTable();
+    }//GEN-LAST:event_tblAppointmentsMouseClicked
+
+    private void btnViewUpcomingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewUpcomingActionPerformed
+        loadUpcomingAppointments();
+    }//GEN-LAST:event_btnViewUpcomingActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        int row = tblAppointments.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Select a row to delete.");
+            return;
+        }
+
+        int id = (int) tableModel.getValueAt(row, 0);
+        if (controller.deleteAppointment(id)) {
+            JOptionPane.showMessageDialog(this, "Appointment removed.");
+            clearFields();
+            loadAppointments();
+        }
+    }//GEN-LAST:event_btnCancelActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -155,14 +411,18 @@ public class AppointmentPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnViewAll;
     private javax.swing.JButton btnViewUpcoming;
     private javax.swing.JComboBox<String> cboCounselor;
+    private javax.swing.JComboBox<String> cboStatus;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCounselor;
     private javax.swing.JLabel lblDate;
+    private javax.swing.JLabel lblID;
+    private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblStudent;
     private javax.swing.JLabel lblTime;
+    private javax.swing.JLabel lblUpdateIndicator;
     private javax.swing.JTable tblAppointments;
-    private javax.swing.JTextField txtDate;
+    private javax.swing.JFormattedTextField txtDate;
     private javax.swing.JTextField txtStudent;
-    private javax.swing.JTextField txtTime;
+    private javax.swing.JFormattedTextField txtTime;
     // End of variables declaration//GEN-END:variables
 }
