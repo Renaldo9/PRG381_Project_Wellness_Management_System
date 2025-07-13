@@ -65,7 +65,7 @@ public class FeedbackPanel extends javax.swing.JPanel {
             txtStudent.setText(tableModel.getValueAt(row, 1).toString());
             spnRating.setValue(tableModel.getValueAt(row, 2));
             taComments.setText(tableModel.getValueAt(row,3).toString());
-            
+            lblID.setText(tableModel.getValueAt(row,0).toString());
         }
     }
     /**
@@ -90,6 +90,8 @@ public class FeedbackPanel extends javax.swing.JPanel {
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnSubmit = new javax.swing.JButton();
+        lblIndicate = new javax.swing.JLabel();
+        lblID = new javax.swing.JLabel();
 
         tblFeedback.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -148,6 +150,8 @@ public class FeedbackPanel extends javax.swing.JPanel {
             }
         });
 
+        lblIndicate.setText("Id for Update:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -164,6 +168,8 @@ public class FeedbackPanel extends javax.swing.JPanel {
                     .addComponent(btnSubmit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblID)
+                    .addComponent(lblIndicate)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnUpdate)
                         .addGap(50, 50, 50)
@@ -198,7 +204,11 @@ public class FeedbackPanel extends javax.swing.JPanel {
                     .addComponent(btnUpdate)
                     .addComponent(btnDelete)
                     .addComponent(btnSubmit))
-                .addContainerGap(113, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblIndicate)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblID)
+                .addContainerGap(79, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -282,6 +292,8 @@ public class FeedbackPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblComments;
+    private javax.swing.JLabel lblID;
+    private javax.swing.JLabel lblIndicate;
     private javax.swing.JLabel lblRating;
     private javax.swing.JLabel lblStudent;
     private javax.swing.JSpinner spnRating;

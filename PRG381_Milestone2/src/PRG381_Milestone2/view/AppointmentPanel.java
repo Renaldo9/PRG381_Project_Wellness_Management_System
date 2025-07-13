@@ -386,6 +386,7 @@ public class AppointmentPanel extends javax.swing.JPanel {
 
     private void btnViewUpcomingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewUpcomingActionPerformed
         loadUpcomingAppointments();
+        clearFields();
     }//GEN-LAST:event_btnViewUpcomingActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
