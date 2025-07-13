@@ -51,20 +51,24 @@ public class MainFrame extends javax.swing.JFrame {
         pnlAppointment = new javax.swing.JPanel();
         pnlCounselor = new javax.swing.JPanel();
         pnlFeedback = new javax.swing.JPanel();
+        lblDashboard = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Wellness Management System");
         setSize(new java.awt.Dimension(900, 600));
 
+        tabbedPane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        tabbedPane.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
         javax.swing.GroupLayout pnlAppointmentLayout = new javax.swing.GroupLayout(pnlAppointment);
         pnlAppointment.setLayout(pnlAppointmentLayout);
         pnlAppointmentLayout.setHorizontalGroup(
             pnlAppointmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 839, Short.MAX_VALUE)
+            .addGap(0, 905, Short.MAX_VALUE)
         );
         pnlAppointmentLayout.setVerticalGroup(
             pnlAppointmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 525, Short.MAX_VALUE)
+            .addGap(0, 521, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Appointment", pnlAppointment);
@@ -73,11 +77,11 @@ public class MainFrame extends javax.swing.JFrame {
         pnlCounselor.setLayout(pnlCounselorLayout);
         pnlCounselorLayout.setHorizontalGroup(
             pnlCounselorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 839, Short.MAX_VALUE)
+            .addGap(0, 905, Short.MAX_VALUE)
         );
         pnlCounselorLayout.setVerticalGroup(
             pnlCounselorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 525, Short.MAX_VALUE)
+            .addGap(0, 521, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Counselor", pnlCounselor);
@@ -86,26 +90,37 @@ public class MainFrame extends javax.swing.JFrame {
         pnlFeedback.setLayout(pnlFeedbackLayout);
         pnlFeedbackLayout.setHorizontalGroup(
             pnlFeedbackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 839, Short.MAX_VALUE)
+            .addGap(0, 905, Short.MAX_VALUE)
         );
         pnlFeedbackLayout.setVerticalGroup(
             pnlFeedbackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 525, Short.MAX_VALUE)
+            .addGap(0, 521, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Feedback", pnlFeedback);
 
         tabbedPane.setSelectedComponent(pnlAppointment);
 
+        lblDashboard.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lblDashboard.setText("Wellness Management System Dashboard");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lblDashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 739, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(125, 125, 125))
+            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1024, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addComponent(lblDashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -137,6 +152,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel lblDashboard;
     private javax.swing.JPanel pnlAppointment;
     private javax.swing.JPanel pnlCounselor;
     private javax.swing.JPanel pnlFeedback;

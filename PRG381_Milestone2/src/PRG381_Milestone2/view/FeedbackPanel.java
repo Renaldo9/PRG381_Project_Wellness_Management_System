@@ -4,19 +4,70 @@
  */
 package PRG381_Milestone2.view;
 
+import PRG381_Milestone2.controller.FeedbackController;
+import PRG381_Milestone2.model.Feedback;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
 /**
  *
  * @author User
  */
 public class FeedbackPanel extends javax.swing.JPanel {
 
+    private FeedbackController controller;
+    
+    private List<Feedback> feedbackList = new ArrayList<>();
+    private DefaultTableModel tableModel;
+    
     /**
      * Creates new form FeedbackPanel
-     */
+     */ 
     public FeedbackPanel() {
         initComponents();
+        controller = new FeedbackController(MainFrame.db.getConnection());
+        tableModel = (DefaultTableModel) tblFeedback.getModel();
+        
+        loadAllFeedback();
+        
     }
-
+    
+    
+    
+    public void loadAllFeedback(){
+        feedbackList = controller.getAllFeedback();
+        tableModel.setRowCount(0);
+        
+        for (Feedback f : feedbackList){
+            tableModel.addRow(new Object[]{
+                f.getId(),
+                f.getStudent(),
+                f.getRating(),
+                f.getComments()
+            });
+        }
+    }
+    
+    public void clearFields(){
+        txtStudent.setText("");
+        spnRating.setValue(0);
+        taComments.setText("");
+    }
+    
+    
+    private void fillFieldsFromTable(){
+        int row = tblFeedback.getSelectedRow();
+        
+        if (row >= 0){
+            //lblID.setText(tableModel.getValueAt(row, 0).toString());
+            txtStudent.setText(tableModel.getValueAt(row, 1).toString());
+            spnRating.setValue(tableModel.getValueAt(row, 2));
+            taComments.setText(tableModel.getValueAt(row,3).toString());
+            
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,9 +96,14 @@ public class FeedbackPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Student", "Rating", "Comments"
+                "id", "student", "rating", "comments"
             }
         ));
+        tblFeedback.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblFeedbackMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblFeedback);
 
         lblStudent.setText("Student Full Name:");
@@ -64,13 +120,33 @@ public class FeedbackPanel extends javax.swing.JPanel {
         jScrollPane2.setViewportView(taComments);
 
         btnViewAll.setText("View All");
+        btnViewAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewAllActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnDelete.setText("Delete");
         btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnSubmit.setText("Submit Feedback");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -125,6 +201,77 @@ public class FeedbackPanel extends javax.swing.JPanel {
                 .addContainerGap(113, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        String student = txtStudent.getText();
+        int rating =(int) spnRating.getValue();
+        String comments = taComments.getText();
+        
+        if (student.isEmpty() || comments.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Please fill in all fields");
+        } else {
+            Feedback f = new Feedback(student, rating, comments);
+            
+            if (controller.addFeedback(f)){
+                JOptionPane.showMessageDialog(this, "Feedback submitted");
+                
+                clearFields();
+                loadAllFeedback();
+            }else{
+                JOptionPane.showMessageDialog(this, "Feedback failed to submit");
+            }
+        }
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
+    private void btnViewAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllActionPerformed
+        loadAllFeedback();
+        clearFields();
+    }//GEN-LAST:event_btnViewAllActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        int row = tblFeedback.getSelectedRow();
+        if (row < 0){
+            JOptionPane.showMessageDialog(this, "Select a row to update");
+            return;
+        }
+        
+        int id = (int) tableModel.getValueAt(row, 0);
+        String student = txtStudent.getText();
+        int rating =(int) spnRating.getValue();
+        String comments = taComments.getText();
+        
+        Feedback f = new Feedback(id,student,rating,comments);
+        
+        if (controller.updateFeedback(f)){
+            JOptionPane.showMessageDialog(this, "Feedback Updated");
+            clearFields();
+            loadAllFeedback();
+        } else {
+            JOptionPane.showMessageDialog(this, "Feedback failed to update");
+        }
+        
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void tblFeedbackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblFeedbackMouseClicked
+        fillFieldsFromTable();
+    }//GEN-LAST:event_tblFeedbackMouseClicked
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int row = tblFeedback.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Select a row to delete.");
+            return;
+        }
+        int confirm = JOptionPane.showConfirmDialog(this,"Are you sure you want to delete this feedback?","Confirm Delete",JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION){
+            int id = (int) tableModel.getValueAt(row, 0);
+            if (controller.deleteFeedback(id)) {
+                JOptionPane.showMessageDialog(this, "Feedback removed.");
+                clearFields();
+                loadAllFeedback();
+            }
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

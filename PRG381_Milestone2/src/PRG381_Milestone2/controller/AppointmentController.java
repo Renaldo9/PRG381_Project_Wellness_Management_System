@@ -90,7 +90,7 @@ public class AppointmentController {
         return list;
     }
     
-    // Update counselor by ID
+    // Update appointment by ID
     public boolean updateAppointment(Appointment appointment) {
         String sql = "UPDATE Appointments SET student=?, counselor=?, date=?, time=?, status=? WHERE id=?";
 
