@@ -4,6 +4,8 @@
  */
 package PRG381_Milestone2;
 import PRG381_Milestone2.view.MainFrame;
+import com.formdev.flatlaf.FlatDarkLaf;
+import javax.swing.UIManager;
 
 /**
  *
@@ -11,6 +13,12 @@ import PRG381_Milestone2.view.MainFrame;
  */
 public class Main {
     public static void main(String[] args){
+        try {
+            UIManager.setLookAndFeel(new FlatDarkLaf());
+        } catch(Exception ex){
+            System.err.println("Failed to initialize");
+        }
+        
         MainFrame mainFrame = new MainFrame();
 
     }

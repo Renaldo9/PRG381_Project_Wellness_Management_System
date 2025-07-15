@@ -5,6 +5,10 @@
 package PRG381_Milestone2.view;
 
 import PRG381_Milestone2.controller.DBConnection;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 /**
  *
@@ -14,6 +18,7 @@ public class MainFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
     public static DBConnection db = new DBConnection();
+    private boolean darkMode = true;
     /**
      * Creates new form MainFrame
      */
@@ -52,6 +57,7 @@ public class MainFrame extends javax.swing.JFrame {
         pnlCounselor = new javax.swing.JPanel();
         pnlFeedback = new javax.swing.JPanel();
         lblDashboard = new javax.swing.JLabel();
+        btnSwitchTheme = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Wellness Management System");
@@ -64,7 +70,7 @@ public class MainFrame extends javax.swing.JFrame {
         pnlAppointment.setLayout(pnlAppointmentLayout);
         pnlAppointmentLayout.setHorizontalGroup(
             pnlAppointmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 905, Short.MAX_VALUE)
+            .addGap(0, 912, Short.MAX_VALUE)
         );
         pnlAppointmentLayout.setVerticalGroup(
             pnlAppointmentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -77,7 +83,7 @@ public class MainFrame extends javax.swing.JFrame {
         pnlCounselor.setLayout(pnlCounselorLayout);
         pnlCounselorLayout.setHorizontalGroup(
             pnlCounselorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 905, Short.MAX_VALUE)
+            .addGap(0, 912, Short.MAX_VALUE)
         );
         pnlCounselorLayout.setVerticalGroup(
             pnlCounselorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -90,7 +96,7 @@ public class MainFrame extends javax.swing.JFrame {
         pnlFeedback.setLayout(pnlFeedbackLayout);
         pnlFeedbackLayout.setHorizontalGroup(
             pnlFeedbackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 905, Short.MAX_VALUE)
+            .addGap(0, 912, Short.MAX_VALUE)
         );
         pnlFeedbackLayout.setVerticalGroup(
             pnlFeedbackLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,6 +110,13 @@ public class MainFrame extends javax.swing.JFrame {
         lblDashboard.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         lblDashboard.setText("Wellness Management System Dashboard");
 
+        btnSwitchTheme.setText("Light Mode");
+        btnSwitchTheme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSwitchThemeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -111,20 +124,41 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(lblDashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 739, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(125, 125, 125))
-            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1024, Short.MAX_VALUE)
+                .addGap(35, 35, 35)
+                .addComponent(btnSwitchTheme)
+                .addGap(40, 40, 40))
+            .addComponent(tabbedPane)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(14, Short.MAX_VALUE)
-                .addComponent(lblDashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSwitchTheme))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 521, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSwitchThemeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSwitchThemeActionPerformed
+        try {
+            if (darkMode){
+                UIManager.setLookAndFeel(new FlatLightLaf());
+                btnSwitchTheme.setText("Dark Mode");
+            } else {
+                UIManager.setLookAndFeel(new FlatDarkLaf());
+                btnSwitchTheme.setText("Light Mode");
+            }
+            
+            SwingUtilities.updateComponentTreeUI(this);
+            darkMode = !darkMode;
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_btnSwitchThemeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -152,6 +186,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSwitchTheme;
     private javax.swing.JLabel lblDashboard;
     private javax.swing.JPanel pnlAppointment;
     private javax.swing.JPanel pnlCounselor;
