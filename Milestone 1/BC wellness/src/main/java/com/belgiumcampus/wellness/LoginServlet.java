@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
 
                 response.sendRedirect("dashboard.jsp");
             } else {
-                response.sendRedirect("login.jsp?error=invalid");
+                response.sendRedirect("login.jsp?error=1");
             }
 
         } catch (SQLException e) {

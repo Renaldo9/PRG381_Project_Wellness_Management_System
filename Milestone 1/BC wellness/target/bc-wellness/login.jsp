@@ -248,6 +248,7 @@
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-sign-in-alt"></i> Login
             </button>
+           
         </form>
 
         <div class="divider">OR</div>
