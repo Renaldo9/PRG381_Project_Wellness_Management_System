@@ -68,7 +68,13 @@ public class CounselorPanel extends javax.swing.JPanel {
         }
     }
     
-    
+    private boolean validateEmpty(String name, String specialization){
+        if (name.isEmpty() || specialization.isEmpty()){
+            return false;
+        } else {
+            return true;
+        }
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -124,7 +130,7 @@ public class CounselorPanel extends javax.swing.JPanel {
             }
         });
 
-        btnViewAll.setText("View All");
+        btnViewAll.setText("View All/Clear Selection");
         btnViewAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewAllActionPerformed(evt);
@@ -224,7 +230,7 @@ public class CounselorPanel extends javax.swing.JPanel {
         String specialization = txtSpecialization.getText();
         String availability = cboAvailability.getSelectedItem().toString();
         
-        if( name.isEmpty() || specialization.isEmpty()){
+        if( !validateEmpty(name, specialization)){
             JOptionPane.showMessageDialog(this, "Please fill in all fields");
             
         }else{
@@ -259,7 +265,12 @@ public class CounselorPanel extends javax.swing.JPanel {
         String name = txtName.getText();
         String spec = txtSpecialization.getText();
         String avail = cboAvailability.getSelectedItem().toString();
-
+        
+        if (!validateEmpty(name, spec)){
+            JOptionPane.showMessageDialog(this, "Please fill in all fields");
+            return;
+        }
+        
         Counselor c = new Counselor(id, name, spec, avail);
         if (controller.updateCounselor(c)) {
             JOptionPane.showMessageDialog(this, "Counselor updated.");

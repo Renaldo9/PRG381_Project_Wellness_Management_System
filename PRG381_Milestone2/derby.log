@@ -1,12 +1,12 @@
 ----------------------------------------------------------------
-Tue Jul 15 09:19:19 SAST 2025:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-0198-0cf3-c468-000006e79580 
-on database directory C:\Users\renal\OneDrive\Documents\GitHub\PRG381_Project_Wellness_Management_System\PRG381_Milestone2\wellnessDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@70dea4e 
-Loaded from file:/C:/Users/renal/OneDrive/Documents/GitHub/PRG381_Project_Wellness_Management_System/PRG381_Milestone2/src/lib/derby.jar
-java.vendor=Oracle Corporation
-java.runtime.version=21.0.7+8-LTS-245
-user.dir=C:\Users\renal\OneDrive\Documents\GitHub\PRG381_Project_Wellness_Management_System\PRG381_Milestone2
-os.name=Windows 11
+Wed Jul 16 11:51:01 SAST 2025:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-0198-12a5-02ea-000016cf6090 
+on database directory C:\Users\User\Documents\PRG381_Project_Wellness_Management_System\PRG381_Milestone2\wellnessDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@11a4022a 
+Loaded from file:/C:/Users/User/Documents/PRG381_Project_Wellness_Management_System/PRG381_Milestone2/src/lib/derby.jar
+java.vendor=Azul Systems, Inc.
+java.runtime.version=24.0.1+9
+user.dir=C:\Users\User\Documents\PRG381_Project_Wellness_Management_System\PRG381_Milestone2
+os.name=Windows 10
 os.arch=amd64
 os.version=10.0
 derby.system.home=null

@@ -1,0 +1,5 @@
+com\belgiumcampus\Main.class
+com\belgiumcampus\wellness\LogoutServlet.class
+com\belgiumcampus\wellness\RegisterServlet.class
+com\belgiumcampus\wellness\DBConnection.class
+com\belgiumcampus\wellness\LoginServlet.class

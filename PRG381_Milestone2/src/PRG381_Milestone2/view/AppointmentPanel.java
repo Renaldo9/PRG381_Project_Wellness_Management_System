@@ -11,6 +11,11 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 /**
  *
@@ -107,6 +112,37 @@ public class AppointmentPanel extends javax.swing.JPanel {
         }
     }
     
+    private boolean validateDate(String dateString){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        try {
+            String cleanedDate = dateString.trim().replaceAll(" ", "0"); // replace empty spaces with 0
+            LocalDate.parse(cleanedDate, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            System.out.println(dateString);
+            return false;
+            
+        }
+    }
+    
+    private boolean validateEmpty(String student, String date, String time){
+        if (student.isEmpty() || date.isEmpty() || time.isEmpty()){
+            return false;
+        } else{
+            return true;
+        }
+    }
+    
+    private boolean validateTime(String timeString) {
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        try {
+            String cleanedTime = timeString.trim().replaceAll(" ", "0"); // fill empty spaces with 0
+            LocalTime.parse(cleanedTime, timeFormatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -325,19 +361,31 @@ public class AppointmentPanel extends javax.swing.JPanel {
         String time = txtTime.getText();
         String status = cboStatus.getSelectedItem().toString();
         
-        if (student.isEmpty() || date.isEmpty() || time.isEmpty()){
+        if (!validateEmpty(student,date,time)){
             JOptionPane.showMessageDialog(this, "Please fill in all fields");
-        } else{
-            Appointment a = new Appointment(student,counselor,date,time,status);
-            
-            if (controller.bookAppointment(a)){
-                JOptionPane.showMessageDialog(this, "Appointment added succesfully");
-                clearFields();
-                loadAppointments();
-            }else{
-                JOptionPane.showMessageDialog(this, "Failed to add appointment");
-            }
+            return;
         }
+        
+        if (!validateDate(date)){
+            JOptionPane.showMessageDialog(this, "Please fill in valid date in the format dd/mm/yyyy");
+            return;
+        }
+            
+        if (!validateTime(time)){
+            JOptionPane.showMessageDialog(this, "Please fill in valid time in the format hh:mm");
+            return;
+        }
+       
+        Appointment a = new Appointment(student,counselor,date,time,status);
+            
+        if (controller.bookAppointment(a)){
+            JOptionPane.showMessageDialog(this, "Appointment added succesfully");
+            clearFields();
+            loadAppointments();
+        }else{
+            JOptionPane.showMessageDialog(this, "Failed to add appointment");
+        }
+        
             
     }//GEN-LAST:event_btnBookActionPerformed
 
@@ -367,6 +415,21 @@ public class AppointmentPanel extends javax.swing.JPanel {
         String date = txtDate.getText();
         String time = txtTime.getText();
         String status = cboStatus.getSelectedItem().toString();
+        
+        if (!validateEmpty(student,date,time)){
+            JOptionPane.showMessageDialog(this, "Please fill in all fields");
+            return;
+        }
+        
+        if (!validateDate(date)){
+            JOptionPane.showMessageDialog(this, "Please fill in valid date in the format dd/mm/yyyy");
+            return;
+        }
+            
+        if (!validateTime(time)){
+            JOptionPane.showMessageDialog(this, "Please fill in valid time in the format hh:mm");
+            return;
+        }
         
         Appointment a = new Appointment(id,student,counselor,date,time,status);
         

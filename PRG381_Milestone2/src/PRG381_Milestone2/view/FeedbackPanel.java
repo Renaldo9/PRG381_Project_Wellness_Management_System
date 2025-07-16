@@ -250,6 +250,11 @@ public class FeedbackPanel extends javax.swing.JPanel {
         int rating =(int) spnRating.getValue();
         String comments = taComments.getText();
         
+        if (student.isEmpty() || comments.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Please fill in all fields");
+            return;
+        }
+        
         Feedback f = new Feedback(id,student,rating,comments);
         
         if (controller.updateFeedback(f)){

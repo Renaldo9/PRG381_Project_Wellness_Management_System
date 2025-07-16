@@ -7,6 +7,9 @@ import PRG381_Milestone2.model.Appointment;
 
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -66,24 +69,33 @@ public class AppointmentController {
     }
     
     public List<Appointment> getAllUpcomingAppointments() {
+
         List<Appointment> list = new ArrayList<>();
-        String sql = "SELECT * FROM Appointments WHERE status='Unresolved'";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate today = LocalDate.now();
+
+        String sql = "SELECT * FROM Appointments";
 
         try (Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                Appointment c = new Appointment(
-                    rs.getInt("id"),
-                    rs.getString("student"),
-                    rs.getString("counselor"),
-                    rs.getString("date"),
-                    rs.getString("time"),
-                    rs.getString("status")
-                );
+                String dateStr = rs.getString("date");
+                LocalDate appointmentDate = LocalDate.parse(dateStr, formatter);
+
+                if (!appointmentDate.isBefore(today)) { // appointmentDate >= today
+                   Appointment c = new Appointment(
+                        rs.getInt("id"),
+                        rs.getString("student"),
+                        rs.getString("counselor"),
+                        dateStr,
+                        rs.getString("time"),
+                        rs.getString("status")
+                    );
                 list.add(c);
+                }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DateTimeParseException e) {
             System.out.println("Failed to fetch upcoming appointments: " + e.getMessage());
         }
 
