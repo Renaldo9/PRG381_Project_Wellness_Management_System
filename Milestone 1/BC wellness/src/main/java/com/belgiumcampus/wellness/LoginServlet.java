@@ -13,6 +13,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -41,8 +43,7 @@ public class LoginServlet extends HttpServlet {
 
                 response.sendRedirect("dashboard.jsp");
             } else {
-                PrintWriter out = response.getWriter();
-                out.println("<h3>Invalid credentials. Please try again.</h3>");
+                response.sendRedirect("login.jsp?error=invalid");
             }
 
         } catch (SQLException e) {

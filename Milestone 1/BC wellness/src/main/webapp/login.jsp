@@ -248,6 +248,16 @@
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-sign-in-alt"></i> Login
             </button>
+            <%
+                String error = request.getParameter("error");
+                if ("invalid".equals(error)) {
+            %>
+                <script>
+                alert("Invalid email or password. Please try again.");
+                </script>
+            <%
+                }
+            %>
         </form>
 
         <div class="divider">OR</div>
